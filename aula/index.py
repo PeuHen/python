@@ -71,6 +71,27 @@ def adicionar_produto():
     
 
     return redirect('/lista')
+# aq inicia a parte da edicao do produto:
+
+@app.route('/editar/<int:id>' ) # rota preparada para recebeer um id
+def editar_produto(id):   #sinal da maior e menor, id's diferentes, se não colocar, será igual pra todos
+    
+    # a linha abaixo trás o produto selecionado pra ser atualizado
+    produto_selecionado = Produto.query.filter_by(id_produto=id).first #filter.by foltrar id especifico
+    return render_template('editar.html', produto = produto_selecionado)
+
+@app.route('/atualizar' , methods=['POST', ])
+def atualiza_registro():
+     
+    # linha abaixo garante a atualização
+    produto = Produto.query.filter_by(id_produto=request.form['textId']).first()
+
+    nome_produto = request.form['txtNome']
+    
+    return ''
+
+
+
 
 app.run()
 
