@@ -72,7 +72,7 @@ def adicionar_produto():
 
     return redirect('/lista')
 # aq inicia a parte da edicao do produto:
-
+ 
 @app.route('/editar/<int:id>') # rota preparada para recebeer um id
 def editar_produto(id):   #sinal da maior e menor, id's diferentes, se não colocar, será igual pra todos
     
@@ -84,14 +84,21 @@ def editar_produto(id):   #sinal da maior e menor, id's diferentes, se não colo
 def atualiza_registro():
      
     # linha abaixo garante a atualização
-    produto = Produto.query.filter_by(id_produto=request.form['textId']).first()
+    produto = Produto.query.filter_by(id_produto=request.form['txtId']).first()
+        #linhas abaixo altera os campos no banco dados
+    produto.nome_produto = request.form['txtNome'] #variavel usada no editar.html
+    produto.marca_produto = request.form['txtMarca']
+    produto.preco_produto = request.form['txtPreco']
+    #produto = nome do banco dados; preco_produto nome dos dados tabela
 
-    nome_produto = request.form['txtNome']
-    
-    return ''
 
 
+    #linha abaixo adiciona a atualização do protudo (update)
+    db.session.add(produto)
 
+    #linha abaixo envia as infos para a tabela do banco
+    db.session.commit()
+    return redirect('/lista')
 
 app.run()
 
