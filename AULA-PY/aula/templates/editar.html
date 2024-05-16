@@ -1,0 +1,37 @@
+{% extends "estrutura.html" %}
+
+{% block conteudo %}
+ <form method="post" action="/atualizar">
+    <!-- o input abaixo é o id do produto-->
+    <input type="hidden" name="txtId"
+    value="{{ produto.id_produto }}"> 
+
+<div class="mb-3">    
+    <label class="form-label">Nome do produto:</label> 
+    <input class="form-control" type="text" name="txtNome"
+    value="{{ produto.nome_produto }}">
+<div>
+
+</div class="mb-3">
+    <label class="form-label">Marca do produto</label>
+    <input class="form-control"type="text" name="txtMarca"
+    value="{{ produto.marca_produto }}">
+
+</div>
+
+<div class="mb-3">
+    <label class="form-label">Preço do produto</label>
+    <input class="form-control" type="text" name="txtPreco"
+    value="{{ produto.preco_produto }}">
+    
+</div>
+
+<div class="mb-3">
+<button class="btn btn-dark" type="submit">Cadastrar Produto</button>
+<div>
+</form>
+
+{% endblock %}
+
+
+
