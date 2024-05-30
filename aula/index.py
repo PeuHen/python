@@ -1,4 +1,4 @@
-from flask import Flask, redirect,render_template, request
+from flask import Flask, redirect,render_template, request, flash, session
 
 from flask_sqlalchemy import SQLAlchemy
 
@@ -38,6 +38,9 @@ def ola():
 
 @app.route('/lista')
 def lista():
+        # sem login sem acao (n vai abrir o lista)
+    if 'usuario_logado' not in session or session['usuario_logado'] == None:
+         return redirect('/login')
 
     produtos_cadastrados = Produto.query.order_by(Produto.id_produto)
        
@@ -68,8 +71,9 @@ def adicionar_produto():
     db.session.add(produto_adicionado)
     #na linha de baixo envia para o banco de dados
     db.session.commit()
-    
 
+    flash(" Produto cadastrado com sucesso!!")
+    #importar o flash
     return redirect('/lista')
 # aq inicia a parte da edicao do produto:
  
@@ -98,8 +102,48 @@ def atualiza_registro():
 
     #linha abaixo envia as infos para a tabela do banco
     db.session.commit()
+    flash(" Produto atualizado com sucesso!!")
     return redirect('/lista')
+
+#A LINHA ABAIXO É INICIADO A PARTE DE EXCLUIR DADOS
+@app.route('/excluir/<int:id>')
+def excluir_produto(id):
+     
+# a linha abaixo exclui o registro
+     Produto.query.filter_by(id_produto=id).delete()
+                            #tem crtza q o id selecionado so vai excluir o id do banco
+     # a linha abaixo sobe a exclusão para o banco
+     db.session.commit() 
+     flash(" Produto excluido com sucesso!!")
+
+     return redirect('/lista')
+# a linha abaixo cria a rota paraa o login
+
+@app.route('/login')
+def login():
+     
+   return render_template ('login.html')
+
+@app.route('/autenticar', methods=['post' ,]) #essa virgula = só essa parte
+def autenticar():
+     login = request.form['txtLogin']
+     senha = request.form['txtSenha']
+
+     if login == 'admin' and senha == 'admin':
+          #*** Importante:
+            # para criar a sessão do usuario é necessário ter
+            # iniciado a propriedade secret_key
+            # ela garante que seja mapeado o hash do usuario
+            # enquantoa a aplicacao esteja sendo executada
+        # session deve ser importado no import do flask 
+        session['usuario_logado'] = login
+        flash("usuario logado com sucesso")
+
+        return redirect("/lista")
+     else:
+        return redirect('/login')
 
 app.run()
 
 # pip install flask
+

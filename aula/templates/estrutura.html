@@ -10,6 +10,16 @@
 
 </head>
 <body>
+  <!-- abaixo é o comando pra emitir a msg-->
+  {% with messages = get_flashed_messages() %}
+   {% if messages %}
+      <ul id="messages" class="list-unstyled">
+        {% for message in messages %}
+        <li class="alert alert-success"> {{ message}}</li>
+        {% endfor %}
+      </ul>
+     {% endif %}
+      {% endwith%}
     <ul class="nav justify-content-end">
         <li class="nav-item">
           <a class="nav-link" href="/cadastrar">Cadastrar</a>
